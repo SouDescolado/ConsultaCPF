@@ -3,6 +3,7 @@ from time import sleep
 from subprocess import run
 import requests
 import re
+import random
 from banner import Banner
 
 # Cores
@@ -21,7 +22,7 @@ run(["git", "pull"])
 
 Banner()
 
-sleep(3)
+input('Pressione enter para continuar')
 
 system('clear')
 
@@ -49,17 +50,33 @@ def tipos():
 		gerarcpf()
 	else:
 		print(f'{C}[{R}-{C}] Seleção inválida.')
-		sleep(1)
 		tipos()
     
 def gerarcpf():
 	print(f'{C}[{G}*{C}] Gerando CPF...')
-	sleep(1)
-	cpf = requests.get('http://geradorapp.com/api/v1/cpf/generate?token=f01e0024a26baef3cc53a2ac208dd141').json()
-	cpf2 = cpf['data']['number_formatted']
-	cpf = cpf['data']['number']
-	print(f'{C}[{Y}i{C}] O CPF gerado foi: {B} {cpf2}')
-	sleep(1)
+	cpf = ''
+	pdig = 0
+	udig = 0
+	for i in range(9):
+		numero = random.randrange(0,9)
+		pdig += (numero * (10 - i))
+		udig += (numero * (11 - i))
+		cpf += str(numero)
+	pdig %= 11
+	if pdig > 1:
+		pdig = 11 - pdig
+	else:
+		pdig = 0
+	cpf += str(pdig)
+	
+	udig += (pdig * 2)
+	if udig > 1:
+		udig = 11 - updig
+	else:
+		udig = 0
+	cpf += str(udig)
+	print(f'{C}[{Y}i{C}] O CPF gerado foi: {B} {cpf}')
+	input('Pressione enter para continuar')
 	print(f'{C}[{G}*{C}] Consultando CPF gerado...')
 	consulta(cpf)
 
